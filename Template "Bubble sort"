@@ -1,0 +1,41 @@
+	/*-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+BUBBLE SORT WITHOUT COMPARATOR-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+	template <class InputIterator>
+	void BubbleSort(InputIterator first, InputIterator last, sort_statist* sInfo = nullptr)
+	{
+		bool flag;
+		InputIterator firstCopy = first;
+
+		//1. Collection of start time and container size
+		if (sInfo)
+		{
+			sInfo->restore();
+			sInfo->size = distance(first, last);
+			QueryPerformanceCounter(&sInfo->start);
+		}
+
+		//2. Sort
+		do
+		{
+			flag = false;
+			first = firstCopy;
+			while (first != last - 1)
+			{
+				if (*(first + 1) < *first)
+				{
+					swap(*(first + 1), *first);
+					if (sInfo)
+						sInfo->permutations++;
+					flag = true;
+				}
+				first++;
+			}
+		} while (flag);
+
+		//3. Collection of the end time and elapsed time of sort
+		if (sInfo)
+		{
+			QueryPerformanceCounter(&sInfo->end);
+			QueryPerformanceFrequency(&sInfo->freq);
+			sInfo->elapsedTime = double(sInfo->end.QuadPart - sInfo->start.QuadPart) / sInfo->freq.QuadPart;
+		}
+	}
