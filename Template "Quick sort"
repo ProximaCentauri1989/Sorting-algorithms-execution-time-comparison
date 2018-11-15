@@ -1,0 +1,103 @@
+	/*-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+  Шаблонный алгоритм сортировки Quick sort (с компаратором и без) 
+  
+	template <class Iterator>
+	void QuickSort(Iterator first, Iterator last, sort_statist* sInfo = nullptr)
+	{
+		size_t left = 0, right = distance(first, last) - 1;
+		size_t pivot = left;
+		size_t l_save = left;
+		size_t r_save = right;
+
+		if (left >= right)
+			return;
+
+		//Collection of start time and container size
+    //(Зафиксировать время начала работы алгоритма)
+		if (sInfo)
+		{
+			sInfo->restore();
+			sInfo->size = distance(first, last);
+			QueryPerformanceCounter(&sInfo->start);
+		}
+    
+    //Пока границы не сомкнутся
+		while (first+left < first+right)
+		{
+			while (*(first + right) >= *(first + pivot) && left < right) //Ищем справа тот элемент, который строго меньше разрещающего
+				right--;
+			while (*(first + left) <= *(first + pivot) && left < right)  //Ищем слева тот элемент, который сторого больше разрещающего
+				left++;
+			if(left < right) //Если границы не сомкнулись выполнить обмен
+				swap(*(first + left), *(first + right));
+		}
+		if(right != pivot) //Если текущая позиция разрешаюшего элемента и его настоящая не совпадают
+			swap(*(first + right), *(first + pivot));
+		pivot = right;
+		left = l_save;
+		right = r_save;
+    
+    //Запустить сортировку левой и правой части последовательности относительно разрешающего элемента
+		if(left < pivot)
+			QuickSort(first, first + pivot);
+		if(right > pivot)
+			QuickSort(first + pivot + 1, last);
+
+		//Collection of the end time and elapsed time of sort
+    //(Зафиксировать время окончания работы алгоритма)
+		if (sInfo)
+		{
+			QueryPerformanceCounter(&sInfo->end);
+			QueryPerformanceFrequency(&sInfo->freq);
+			sInfo->elapsedTime = double(sInfo->end.QuadPart - sInfo->start.QuadPart) / sInfo->freq.QuadPart;
+		}
+	}
+
+	template <class Iterator, class Compare>
+	void QuickSort(Iterator first, Iterator last, Compare comp, sort_statist* sInfo = nullptr)
+	{
+		size_t left = 0, right = distance(first, last) - 1;
+		size_t pivot = left;
+		size_t l_save = left;
+		size_t r_save = right;
+
+		if (left >= right)
+			return;
+
+		//Collection of start time and container size
+		if (sInfo)
+		{
+			sInfo->restore();
+			sInfo->size = distance(first, last);
+			QueryPerformanceCounter(&sInfo->start);
+		}
+    
+		while (first + left < first + right)
+		{
+			while (comp(*(first + right),*(first + pivot)) && left < right)
+				right--;
+			while (comp(*(first + pivot), *(first + left)) && left < right)
+				left++;
+			if (left < right)
+				swap(*(first + left), *(first + right));
+		}
+		if (right != pivot)
+			swap(*(first + right), *(first + pivot));
+		pivot = right;
+		left = l_save;
+		right = r_save;
+
+		if (left < pivot)
+			QuickSort(first, first + pivot);
+		if (right > pivot)
+			QuickSort(first + pivot + 1, last);
+
+		//Collection of the end time and elapsed time of sort
+    //(Зафиксировать время окончания рабоыт алгоритма)
+		if (sInfo)
+		{
+			QueryPerformanceCounter(&sInfo->end);
+			QueryPerformanceFrequency(&sInfo->freq);
+			sInfo->elapsedTime = double(sInfo->end.QuadPart - sInfo->start.QuadPart) / sInfo->freq.QuadPart;
+		}
+	}
