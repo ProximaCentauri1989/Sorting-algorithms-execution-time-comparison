@@ -24,8 +24,11 @@ Elasped time: 258.721156 sec
 ----------------------------
 
 ------Selectional sort------
+
 Amount of elements: 100000
+
 Elasped time: 11.056420 sec
+
 ----------------------------
 
 -------Merge sort---------
