@@ -70,8 +70,8 @@
 	}
   
   	/*-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+MERGER WITH OR WITHOUT COMPARATOR-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
-	template<class InputIterator>
-	void merger(InputIterator lft, InputIterator mid, InputIterator rght)
+	template<class Iterator>
+	void merger(Iterator lft, Iterator mid, Iterator rght)
 	{
 		//1. Get typeid
 		/*typedef decltype(*lft) tp;
@@ -121,8 +121,8 @@
 		delete[] res;
 	}
 
-	template<class InputIterator, class Compare>
-	void merger(InputIterator lft, InputIterator mid, InputIterator rght, Compare comp)
+	template<class Iterator, class Compare>
+	void merger(Iterator lft, Iterator mid, InputIterator rght, Compare comp)
 	{
 		//1. Get typeid
 		/*typedef decltype(*lft) tp;
