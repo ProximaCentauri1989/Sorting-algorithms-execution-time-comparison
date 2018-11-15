@@ -1,0 +1,172 @@
+	/*-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+MERGE SORT WITH OR WITHOUT COMPARATOR-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+	template <class Iterator>
+	void MergeSort(Iterator first, Iterator last,  sort_statist* sInfo = nullptr)
+	{
+		Iterator left, right, mid;
+		size_t i, j, n = distance(first, last);
+
+		//1. Зафиксировать время начала работы алгоритма
+		if (sInfo)
+		{
+			sInfo->restore();
+			sInfo->size = distance(first, last);
+			QueryPerformanceCounter(&sInfo->start);
+		}
+
+		//2. Цикл разбиения массива на подпоследовательности
+		for (i = 1; i < n; i *= 2)
+		{
+			for (j = 0; j < n - i; j += 2*i)
+			{
+				left = first + j;
+				mid = first + i + j;
+				right = first + min(j + 2 * i, n);
+				merger(left, mid, right);
+			}
+		}
+		
+		//3. Зафиксировать время окончания работы алгоритма
+		if (sInfo)
+		{
+			QueryPerformanceCounter(&sInfo->end);
+			QueryPerformanceFrequency(&sInfo->freq);
+			sInfo->elapsedTime = double(sInfo->end.QuadPart - sInfo->start.QuadPart) / sInfo->freq.QuadPart;
+		}
+	}
+
+	template <class Iterator, class Compare>
+	void MergeSort(Iterator first, Iterator last, Compare comp, sort_statist* sInfo = nullptr)
+	{
+		Iterator left, right, mid;
+		size_t i, j, n = distance(first, last);
+
+		//1. Collection of start time and container size
+		if (sInfo)
+		{
+			sInfo->restore();
+			sInfo->size = distance(first, last);
+			QueryPerformanceCounter(&sInfo->start);
+		}
+
+		//2. Цикл разбиения массива на подпоследовательности
+		for (i = 1; i < n; i *= 2)
+		{
+			for (j = 0; j < n - i; j += 2 * i)
+			{
+				left = first + j;
+				mid = first + i + j;
+				right = first + min(j + 2 * i, n);
+				merger(left, mid, right, comp);
+			}
+		}
+
+		//3. Collection of the end time and elapsed time of sort
+		if (sInfo)
+		{
+			QueryPerformanceCounter(&sInfo->end);
+			QueryPerformanceFrequency(&sInfo->freq);
+			sInfo->elapsedTime = double(sInfo->end.QuadPart - sInfo->start.QuadPart) / sInfo->freq.QuadPart;
+		}
+	}
+  
+  	/*-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+MERGER WITH OR WITHOUT COMPARATOR-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+	template<class InputIterator>
+	void merger(InputIterator lft, InputIterator mid, InputIterator rght)
+	{
+		//1. Get typeid
+		/*typedef decltype(*lft) tp;
+		typedef typename remove_reference<typename remove_const<tp>::type>::type T;*/
+    
+    //Получить тип элемента последовательности
+		auto x = *lft;
+		typedef decltype(x) T;
+
+		size_t i = 0, j = 0, k = 0, count;
+		T* res = new T[distance(lft, rght)]; //Создать вспомогательный массив дял слияния типа T
+
+		//2. Merge
+		//2.1
+		while (lft + i < mid && mid + j < rght) //Пока не достигнута граница одной из подпоследовательностей
+		{
+			if (*(lft + i) < *(mid + j)) //Если элемент левой подпоследовательности меньше элемента правой подпоследовательности
+			{
+				res[i + j] = *(lft + i);
+				i++;
+			}
+			else
+			{
+				res[i + j] = *(mid + j);
+				j++;
+			}
+		}
+		//2.2 Оставшиеся элементы слить во вспомогательный массив
+		while (lft + i < mid)
+		{
+			res[i + j] = *(lft + i);
+			i++;
+		}
+		while (mid + j < rght)
+		{
+			res[i + j] = *(mid + j);
+			j++;
+		}
+		//2.3
+		while (k < i + j)
+		{
+			*(lft + k) = res[k];
+			k++;
+		}
+
+		//3. Freeing temporary memory
+		delete[] res;
+	}
+
+	template<class InputIterator, class Compare>
+	void merger(InputIterator lft, InputIterator mid, InputIterator rght, Compare comp)
+	{
+		//1. Get typeid
+		/*typedef decltype(*lft) tp;
+		typedef typename remove_reference<typename remove_const<tp>::type>::type T;*/
+
+		auto x = *lft;
+		typedef decltype(x) T;
+
+		size_t i = 0, j = 0, k = 0;
+		T* res = new T[distance(lft, rght)];
+
+		//2. Merge
+		//2.1
+		while (lft + i < mid && mid + j < rght)
+		{
+			if (comp(*(lft + i), *(mid + j)))
+			{
+				res[i + j] = *(lft + i);
+				i++;
+			}
+			else
+			{
+				res[i + j] = *(mid + j);
+				j++;
+			}
+		}
+		//2.2
+		while (lft + i < mid)
+		{
+			res[i + j] = *(lft + i);
+			i++;
+		}
+		while (mid + j < rght)
+		{
+			res[i + j] = *(mid + j);
+			j++;
+		}
+		//2.3
+		while (k < i + j)
+		{
+			*(lft + k) = res[k];
+			k++;
+		}
+
+		//3. Freeing temporary memory
+		delete[] res;
+	}
