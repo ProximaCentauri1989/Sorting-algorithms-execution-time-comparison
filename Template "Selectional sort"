@@ -1,0 +1,78 @@
+/*-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+SELECTION SORT WITH OR WITHOUT COMPARATOR-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+	template <class InputIterator>
+	void SelectionalSort(InputIterator first, InputIterator last, sort_statist* sInfo = nullptr)
+	{
+		InputIterator min, second;
+		if (sInfo)
+		{
+			sInfo->restore();
+			sInfo->size = distance(first, last);
+			QueryPerformanceCounter(&sInfo->start);
+		}
+
+		while (first != last - 1)
+		{
+			min = first;
+			second = first + 1;
+			while (second != last)
+			{
+				if (*second < *min)
+					min = second;
+				second++;
+			}
+			if (min == first)
+			{
+				first++;
+				continue;
+			}
+			std::swap(*first, *min);
+			if (sInfo)
+				sInfo->permutations++;
+			first++;
+		}
+		if (sInfo)
+		{
+			QueryPerformanceCounter(&sInfo->end);
+			QueryPerformanceFrequency(&sInfo->freq);
+			sInfo->elapsedTime = double(sInfo->end.QuadPart - sInfo->start.QuadPart) / sInfo->freq.QuadPart;
+		}
+	}
+
+	template <class InputIterator, class Compare>
+	void SelectionalSort(InputIterator first, InputIterator last, Compare comp, sort_statist* sInfo = nullptr)
+	{
+		InputIterator min, second;
+		if (sInfo)
+		{
+			sInfo->restore();
+			sInfo->size = distance(first, last);
+			QueryPerformanceCounter(&sInfo->start);
+		}
+
+		while (first != last - 1)
+		{
+			min = first;
+			second = first + 1;
+			while (second != last)
+			{
+				if (comp(*second,*min))
+					min = second;
+				second++;
+			}
+			if (min == first)
+			{
+				first++;
+				continue;
+			}
+			std::swap(*first, *min);
+			if (sInfo)
+				sInfo->permutations++;
+			first++;
+		}
+		if (sInfo)
+		{
+			QueryPerformanceCounter(&sInfo->end);
+			QueryPerformanceFrequency(&sInfo->freq);
+			sInfo->elapsedTime = double(sInfo->end.QuadPart - sInfo->start.QuadPart) / sInfo->freq.QuadPart;
+		}
+	}
