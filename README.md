@@ -8,13 +8,19 @@ Enter array size: 100000
 Generation an array...done
 
 -------Bubble sort-------
+
 Amount of elements: 100000
+
 Elasped time: 293.718188 sec
+
 -------------------------
 
 ------Insertional sort------
+
 Amount of elements: 100000
+
 Elasped time: 258.721156 sec
+
 ----------------------------
 
 ------Selectional sort------
@@ -23,30 +29,48 @@ Elasped time: 11.056420 sec
 ----------------------------
 
 -------Merge sort---------
+
 Amount of elements: 100000
+
 Elasped time: 0.058278 sec
+
 --------------------------
 
 -------Pyramid sort-------
+
 Amount of elements: 100000
+
 Elasped time: 0.183829 sec
+
 ---------------------------
 
 -------Quick sort---------
+
 Amount of elements: 100000
+
 Elasped time: 0.060005 sec
+
 ---------------------------
 
 Для начала, вспомним показатели эффективности заданных алгоритмов:
+
 Bubble sort -      O(n^2)
+
 Insertional sort - O(n^2)
+
 Selectional sort - O(n^2)
+
 Merge sort -       O(n*log(n))
+
 Pyramid sort -     O(n*log(n))
+
 Quick sort -       O(n*log(n))
 
+
 Приводить математику не имеет смысла. Это всё есть в википедии и на др. ресурсах.
+
 Свои наблюдения:
+
 Несмотря на схожие показатели эффективности у первых трёх алгоритмов, у Selectional sort показатель времени сортировки меньше в среднем
 в 25 раз, поскольку, в нем максимальное количество операций обмена сведено к n-1 раз. При умеренной длине последовательности алгоритм
 Selectional sort неплохой выбор исходя из простоты её написания. Алгоритмы Quick sort и Merge sort выдают практически одинаковое
