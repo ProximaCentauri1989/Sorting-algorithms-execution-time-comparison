@@ -1,0 +1,15 @@
+Способ первый. Пользуемся QueryPerformanceCounter.
+QueryPerformanceCounter(start);
+/*code*/
+QueryPerformanceCounter(end);
+QueryPerformanceFrequency(freq);
+elapsedTime = double(end.QuadPart - start.QuadPart) / freq.QuadPart;
+
+Способ второй. Пользуемся TickCount из <ticks.h>
+#include <ticks.h>
+long ticks;
+double elaspedTime;
+ticks = TickCount();
+/*code*/
+ticks = TickCount() – ticks;
+elaspedTime = ticks / 60;
