@@ -78,6 +78,7 @@
 		typedef typename remove_reference<typename remove_const<tp>::type>::type T;*/
     
     //Получить тип элемента последовательности
+    //typedef typename std::iterator_traits<Iterator>::value_type T;
 		auto x = *lft;
 		typedef decltype(x) T;
 
@@ -125,6 +126,8 @@
 	void merger(Iterator lft, Iterator mid, InputIterator rght, Compare comp)
 	{
 		//1. Get typeid
+		//typedef typename std::iterator_traits<Iterator>::value_type T;
+		
 		/*typedef decltype(*lft) tp;
 		typedef typename remove_reference<typename remove_const<tp>::type>::type T;*/
 
